@@ -1,15 +1,14 @@
 
 import type { ReactElement } from 'react'
 import MainLayout from "../layouts/main-layout.layout";
-import type { NextPageWithLayout } from './_app'
-import Link from "next/link";
+import type { NextPageWithLayout } from './_app';
+import GoogleMap from '../components/google-map.component';
 
 const Page: NextPageWithLayout = () => {
     return (
         <div>
-            <Link href='/location'>Location</Link>
-            <br/>
-            <Link href='/forecast'>Forecast</Link>
+            <p>index</p>
+            <GoogleMap coords={{lng:43,lat:34}}/>
         </div>
     )
 }

@@ -1,10 +1,12 @@
 import React, {ReactElement} from 'react';
+import MainLayout from "../layouts/main-layout.layout";
+
 
 const Location = ():ReactElement => {
     return (
-        <div>
+        <MainLayout>
             <p>Location</p>
-        </div>
+        </MainLayout>
     );
 };
 
