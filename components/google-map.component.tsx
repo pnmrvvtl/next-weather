@@ -1,6 +1,6 @@
 import React, {ReactElement, useState} from 'react';
 import GoogleMapReact from 'google-map-react';
-
+import {getForecast} from '../utils/weather-api.utils';
 
 export default function GoogleMap({coords}: { coords: { lat: number; lng: number } }) {
     const [point, setPoint] = useState([45, 55]);
@@ -17,13 +17,14 @@ export default function GoogleMap({coords}: { coords: { lat: number; lng: number
         )
     }
 
-    const _onClick = ({
+    const _onClick = async ({
                           x,
                           y,
                           lat,
                           lng,
                           event
                       }: { x: number, y: number, lat: number, lng: number, event: any }) => {
+        console.log(await getForecast([lat, lng]));
         setPoint([lat, lng]);
     }
     return (
