@@ -1,9 +1,21 @@
-import React, {ReactElement, useState} from 'react';
+import React, {ReactElement, useEffect, useState} from 'react';
 import GoogleMapReact from 'google-map-react';
-import {getForecast} from '../utils/weather-api.utils';
+import {useGetForecastQuery} from "../redux/slices/weather.slice";
+import {skipToken} from "@reduxjs/toolkit/query";
+import {ForecastQueryOptions} from "../types/query-options.type";
 
 export default function GoogleMap({coords}: { coords: { lat: number; lng: number } }) {
-    const [point, setPoint] = useState([45, 55]);
+    const [point, setPoint] = useState([45, 55])
+
+    const [myState, setState] = useState<ForecastQueryOptions>({
+        location: 'London',
+        days: 2,
+        aqi: 'no',
+        alerts: 'no'
+    }) // initialize with skipToken to skip at first
+    const result = useGetForecastQuery(myState);
+
+
     const style = {
         width: '450px',
         height: '450px'
@@ -17,14 +29,20 @@ export default function GoogleMap({coords}: { coords: { lat: number; lng: number
         )
     }
 
-    const _onClick = async ({
+    const onMapClick = ({
                           x,
                           y,
                           lat,
                           lng,
                           event
                       }: { x: number, y: number, lat: number, lng: number, event: any }) => {
-        console.log(await getForecast([lat, lng]));
+        setState({
+            location: `${lat},${lng}`,
+            days: 2,
+            aqi: 'no',
+            alerts: 'no'
+        });
+        console.log(result);
         setPoint([lat, lng]);
     }
     return (
@@ -36,7 +54,7 @@ export default function GoogleMap({coords}: { coords: { lat: number; lng: number
                         mapTypeControl: true,
                         scrollwheel: true,
                     }}
-                    onClick={_onClick}
+                    onClick={onMapClick}
                     bootstrapURLKeys={{
                         key: process.env.NEXT_PUBLIC_REACT_APP_GOOGLE_MAPS_API_KEY!,
                         language: 'ua',
@@ -48,11 +66,11 @@ export default function GoogleMap({coords}: { coords: { lat: number; lng: number
                     defaultZoom={1}
                     margin={[0, 0, 0, 0]}
                 >
-                    <AnyReactComponent text='asd' lat={point[0]} lng={point[1]}/>
+                    <AnyReactComponent text='Marker' lat={point[0]} lng={point[1]}/>
                 </GoogleMapReact>
             </div>
             <div>
-                dede
+                Google Map
             </div>
         </>
     )
